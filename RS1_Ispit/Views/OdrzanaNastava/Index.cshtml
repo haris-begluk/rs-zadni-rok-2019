@@ -1,0 +1,32 @@
+﻿@using RS1_Ispit_asp.net_core.ViewModels
+@model List<SkolaNastavniciVM>
+>@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Skola</th>
+            <th>Nastavnik</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(SkolaNastavniciVM skolaNastavniciVM in Model)
+        {
+            @if(skolaNastavniciVM.Skola!=null)
+            {
+                <tr>
+                    <td>@skolaNastavniciVM.Skola</td>
+                    <td>@skolaNastavniciVM.Nastavnik</td>
+                    <td><a href="/OdrzanaNastava/Odaberi?id=@skolaNastavniciVM.NastavnikID">Odaberi</a></td>
+                </tr>
+            }
+        }
+    </tbody>
+
+</table>

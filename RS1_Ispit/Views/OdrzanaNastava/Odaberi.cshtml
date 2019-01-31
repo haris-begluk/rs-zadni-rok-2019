@@ -1,0 +1,37 @@
+﻿@using RS1_Ispit_asp.net_core.ViewModels
+@model MaturskiIspitVM
+@{
+    ViewData["Title"] = "Odaberi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Odaberi</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Skola</th>
+            <th>Predmet</th>
+            <th>Nisu pristupili</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(MaturskiIspitVM.Row row in Model.Rows)
+        {
+            <tr>
+                <td>@row.Datum</td>
+                <td>@row.Skola</td>
+                <td>@row.Predmet</td>
+                <td>
+                    @foreach(var a in row.NisuPristupili)
+                    {
+                        <span>@a,</span>
+                    }
+                </td>
+                <td><a href="/OdrzanaNastava/Uredi?id=@row.MaturskiIspitId">Uredi</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

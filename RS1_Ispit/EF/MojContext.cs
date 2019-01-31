@@ -36,5 +36,8 @@ namespace RS1_Ispit_asp.net_core.EF
         public DbSet<PredajePredmet> PredajePredmet { get; set; }
         public DbSet<Skola> Skola { get; set; }
         public DbSet<SkolskaGodina> SkolskaGodina { get; set; }
+
+        public DbSet<MaturskiIspit> MaturskiIspit { get; set; }
+        public DbSet<MaturskiIspitStavka> MaturskiIspitStavka { get; set; }
     }
 }

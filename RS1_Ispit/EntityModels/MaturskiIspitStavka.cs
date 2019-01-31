@@ -14,7 +14,7 @@ namespace RS1_Ispit_asp.net_core.EntityModels
         public int UcenikId { get; set; }
         public Ucenik Ucenik { get; set; }
 
-        public decimal ProsjekOcjena { get; set; }
+        public double ProsjekOcjena { get; set; }
         public bool PristupioIspitu { get; set; }
         public float Rezultat { get; set; }
     }

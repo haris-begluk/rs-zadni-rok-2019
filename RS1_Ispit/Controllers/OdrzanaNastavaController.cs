@@ -138,6 +138,83 @@ namespace RS1_Ispit_asp.net_core.Controllers
 
             return status;
         }
+        public IActionResult Uredi(int id)
+        {
+
+            MaturskiIspitUrediVM model = context.MaturskiIspit.Include(h=>h.Predmet).Where(x=>x.Id==id).Select(c => new MaturskiIspitUrediVM
+            {
+                MaturskiIspitID=c.Id,
+                Predmet=c.Predmet.Naziv,
+                Datum=c.Datum.ToString("dd.MM.yyyy"),
+                Napomena=c.Napomena
+
+
+            }).FirstOrDefault();
+
+            return View(model);
+        }
+        public IActionResult UrediSnimi(MaturskiIspitUrediVM maturskiIspitUrediVM)
+        {
+            MaturskiIspit maturskiIspit = context.MaturskiIspit.Find(maturskiIspitUrediVM.MaturskiIspitID);
+            maturskiIspit.Napomena = maturskiIspitUrediVM.Napomena;
+            context.MaturskiIspit.Update(maturskiIspit);
+            context.SaveChanges();
+
+            return Redirect("/OdrzanaNastava/Uredi?id=" + maturskiIspitUrediVM.MaturskiIspitID);
+        }
+        public IActionResult AjaxStavke(int id)
+        {
+            List<AjaxStavke> model = context.MaturskiIspitStavka.Include(h=>h.Ucenik).Where(x => x.MaturskiIspitId == id).Select(b => new ViewModels.AjaxStavke
+            {
+                MaturskiIspitStavkaId=b.Id,
+                Ucenik=b.Ucenik.ImePrezime,
+                ProsjekOcjena = context.DodjeljenPredmet
+                        .Where(x => x.OdjeljenjeStavkaId == context.OdjeljenjeStavka
+                        .Where(g => g.UcenikId == b.UcenikId).FirstOrDefault().Id).Average(c => c.ZakljucnoKrajGodine),
+                PristupioIspitu=b.PristupioIspitu?"Da":"Ne",
+                Rezulat=b.Rezultat
+
+            }).ToList();
+
+            return PartialView(model);
+        }
+        public IActionResult Pristupio(int id)
+        {
+
+            MaturskiIspitStavka stavka = context.MaturskiIspitStavka.Find(id);
+            stavka.PristupioIspitu = !stavka.PristupioIspitu;
+
+            context.MaturskiIspitStavka.Update(stavka);
+            context.SaveChanges();
+
+            return Redirect("/OdrzanaNastava/Uredi?id="
+                + context.MaturskiIspitStavka.FirstOrDefault(x => x.Id == id).MaturskiIspitId);
+        }
+        public IActionResult UrediUcenika(int id)
+        {
+            MaturskiIspitStavka stavka = context.MaturskiIspitStavka.Include(g=>g.Ucenik).FirstOrDefault(x => x.Id == id);
+
+            UrediUcenikaVM model = new UrediUcenikaVM
+            {
+                MaturskiIspitStavkaID=stavka.Id,
+                Ucenik=stavka.Ucenik.ImePrezime,
+                Bodovi=stavka.Rezultat
+            };
+
+            return PartialView(model);
+        }
+        public IActionResult UrediUcenikaSnimi(UrediUcenikaVM urediUcenikaVM)
+        {
+            MaturskiIspitStavka maturskiIspit = context.MaturskiIspitStavka.Find(urediUcenikaVM.MaturskiIspitStavkaID);
+            maturskiIspit.Rezultat = urediUcenikaVM.Bodovi;
+            context.MaturskiIspitStavka.Update(maturskiIspit);
+            context.SaveChanges();
+
+            return Redirect("/OdrzanaNastava/Uredi?id="
+                + context.MaturskiIspitStavka
+                .FirstOrDefault(x => x.Id == urediUcenikaVM.MaturskiIspitStavkaID)
+                .MaturskiIspitId);
+        }
     }
 
 

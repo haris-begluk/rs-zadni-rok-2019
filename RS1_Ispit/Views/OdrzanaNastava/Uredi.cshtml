@@ -1,0 +1,39 @@
+﻿@using RS1_Ispit_asp.net_core.ViewModels
+@model MaturskiIspitUrediVM
+@{
+    ViewData["Title"] = "Uredi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Uredi</h2>
+
+<form action="/OdrzanaNastava/UrediSnimi">
+
+   <div class="form-group">
+       <label>Datum</label>
+       <input asp-for="Datum" readonly class="form-control" />
+
+   </div>
+    <div class="form-group">
+        <label>Predmet</label>
+        <input asp-for="Predmet" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label>Napomena</label>
+        <textarea asp-for="Napomena" class="form-control"></textarea>
+    </div>
+    <input asp-for="MaturskiIspitID" hidden />
+
+    <button type="submit" class="btn btn-block">Snimi</button>
+</form>
+
+<div id="stavke">
+
+</div>
+<script>
+    $.get("/OdrzanaNastava/AjaxStavke?id=@Model.MaturskiIspitID", function (result) {
+
+        $("#stavke").html(result);
+
+    });
+</script>

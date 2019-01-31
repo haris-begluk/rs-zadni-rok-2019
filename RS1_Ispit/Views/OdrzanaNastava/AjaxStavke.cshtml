@@ -1,0 +1,48 @@
+﻿@using RS1_Ispit_asp.net_core.ViewModels
+@model List<AjaxStavke>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ucenik</th>
+            <th>Prosjek ocjena</th>
+            <th>Pristupio ispitu</th>
+            <th>Rezultat</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(AjaxStavke ajaxStavke in Model)
+        {
+            <tr>
+               <td>@ajaxStavke.Ucenik</td>
+                <td>@ajaxStavke.ProsjekOcjena</td>
+                <td><a href="/OdrzanaNastava/Pristupio?id=@ajaxStavke.MaturskiIspitStavkaId">@ajaxStavke.PristupioIspitu</a></td>
+                @if(ajaxStavke.PristupioIspitu=="Da")
+                {
+                    <td>@ajaxStavke.Rezulat</td>
+                    <td><button idvalue="@ajaxStavke.MaturskiIspitStavkaId" class="uredi">Uredi</button></td>
+
+                }
+                else
+                {
+                    <td>x</td>
+                    <td></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(".uredi").click(function () {
+
+        var id = $(this).attr("idvalue");
+
+        $.get("/OdrzanaNastava/UrediUcenika?id=" + id, function (result) {
+
+            $("#stavke").html(result);
+        });
+    });
+</script>
